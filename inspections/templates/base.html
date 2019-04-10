@@ -1,0 +1,73 @@
+{% load bootstrap4 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% bootstrap_css %}
+    <title>Hestia {% block page_title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'stickyfooter.css' %}" />
+
+  </head>
+  <body>
+    <header class="container">
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'index' %}">Hestia</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto">
+            
+            {% load tags %}
+            
+            {% block navbar %}
+              {% if user.is_authenticated  %}
+                {% if user.is_superuser %}
+                  {% url 'home' as home %}
+                  <li class="nav-item">
+                    <a class="nav-link {% active request home %}" href="{{ home }}">Home</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Inspectors</a>
+                  </li>
+                {% endif %}
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Customers</a>
+                </li>
+              {% endif %}
+            <li class="nav-item">
+              {% url 'about' as about %}
+              <a class="nav-link {% active request about %}" href="{{ about }}">About</span></a>
+            </li>
+            <li class="nav-item">
+              {% url 'contact' as contact %}
+              <a class="nav-link {% active request contact %}" href="{{ contact }}">Contact</a>
+            </li>
+            {% endblock %}
+          </ul>
+        </div>
+      </nav>
+      
+      
+      
+      <h1>Hestia</h1>
+      <nav class="nav nav-pills">
+        <a class="nav-item nav-link active" href="#">Sign in</a>
+      </nav>
+    </header>
+    <main class="container">
+        {% autoescape off %}{% bootstrap_messages %}{% endautoescape %}
+        {% block content %}(no content){% endblock %}
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">&copy; {% now "Y" %} <a href="http://jeff.how" target="_blank">Jeff.how</a></span>
+      </div>
+    </footer>
+    {% bootstrap_javascript jquery='full' %}
+  </body>
+</html>
